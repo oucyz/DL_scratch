@@ -1,4 +1,6 @@
-from common.import_np import *
+import sys
+sys.path.append('..')
+from common.import_library import *
 
 class SGD:
     def __init__(self, lr=0.01):
