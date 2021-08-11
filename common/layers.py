@@ -1,5 +1,6 @@
+import sys
+sys.path.append('..')
 from common.import_library import *
-# from import_library import *
 
 
 class MatMul:
