@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 x, t = spiral.load_data()
 print('x.shape =', x.shape) # (300, 2)
-print('t.shape =', t.shape) # (300, 2)
+print('t.shape =', t.shape) # (300, 3)
 
 xlabels = t.argmax(axis=1)
 x1 = x[xlabels == 0]
