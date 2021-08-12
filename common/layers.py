@@ -1,6 +1,7 @@
 import sys
 sys.path.append('..')
 from common.import_library import *
+from common.functions import softmax, cross_entropy_error
 
 
 class MatMul:
@@ -59,4 +60,24 @@ class Affine:
 
         self.grads[0][...] = dW
         self.grads[1][...] = db
+        return dx
+
+
+class SoftmaxWithLoss:
+    def __init__(self):
+        self.params = []
+        self.grads = []
+        self.y = None # predict
+        self.t = None # label
+    
+    def forward(self, x, t):
+        self.t = t
+        self.y = softmax(x)
+
+        loss = cross_entropy_error(self.y, self.t)
+        return loss
+    
+    def backward(self, dout=1):
+        batch_size = self.y.shape[1]
+        dx = (self.y - self.t) * dout / batch_size
         return dx
