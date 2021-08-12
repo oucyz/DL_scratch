@@ -2,7 +2,7 @@ import sys
 import pytest
 sys.path.append('..')
 from common.import_library import *
-from common.functions import softmax, cross_entropy_error
+from common.functions import softmax, cross_entropy_error, int_to_onehot
 
 
 batch_size = 1 # batch size
@@ -39,6 +39,37 @@ def test_softmax():
         np.array([[0.00235563, 0.00235563, 0.00235563], [0.04731416, 0.04731416, 0.04731416], [0.95033021, 0.95033021, 0.95033021]]),
         rtol=1e-5)
 
+def test_int_to_onehot():
+    labels1 = np.array([0, 1, 2, 3, 4])
+    onehot_labels1 = int_to_onehot(labels1)
+    # print(onehot_labels1)
+    # print(np.eye(5))
+    np.testing.assert_allclose(
+        onehot_labels1,
+        np.eye(5)
+    )
+
+    labels2 = np.array([3, 2, 5, 1, 9, 4])
+    onehot_labels2 = int_to_onehot(labels2)
+    # print(onehot_labels2)
+    np.testing.assert_allclose(
+        onehot_labels2,
+        np.array([
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0],
+            [0, 1, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1],
+            [0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0],
+        ])
+    )
+
+# test_cross_entropy()
 # test_softmax()
+# test_int_to_onehot()
 if __name__ == '__main__':
     pytest.main()
