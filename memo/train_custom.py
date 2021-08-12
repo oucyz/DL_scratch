@@ -1,11 +1,10 @@
 import sys
 sys.path.append('..')
-import numpy as np
-import matplotlib.pyplot as plt
-
+from common.import_library import *
+from dataset import spiral
 from models.two_layer_net import TwoLayerNet
 from common.optimizer import SGD
-from dataset import spiral
+from common.trainer import Trainer
 
 
 n_epochs = 300
@@ -23,38 +22,42 @@ print('t =', t.shape)
 model = TwoLayerNet(2, hidden_size, 3)
 optimizer = SGD(lr=learning_rate)
 
-data_size = x.shape[1]
-n_iters = data_size // batch_size
-total_loss = 0
-loss_count = 0
-loss_list = []
+trainer = Trainer(model, optimizer)
+trainer.fit(x, t, n_epochs, batch_size, eval_interval=10)
+trainer.plot()
 
-for epoch in range(1, n_epochs+1):
-    idx = np.random.permutation(data_size)
-    x = x[:, idx]
-    t = t[:, idx]
+# data_size = x.shape[1]
+# n_iters = data_size // batch_size
+# total_loss = 0
+# loss_count = 0
+# loss_list = []
 
-    for iters in range(n_iters):
-        batch_x = x[:, iters*batch_size:(iters+1)*batch_size]
-        batch_t = t[:, iters*batch_size:(iters+1)*batch_size]
+# for epoch in range(1, n_epochs+1):
+#     idx = np.random.permutation(data_size)
+#     x = x[:, idx]
+#     t = t[:, idx]
 
-        loss = model.forward(batch_x, batch_t)
-        model.backward()
-        optimizer.update(model.params, model.grads)
+#     for iters in range(n_iters):
+#         batch_x = x[:, iters*batch_size:(iters+1)*batch_size]
+#         batch_t = t[:, iters*batch_size:(iters+1)*batch_size]
 
-        total_loss += loss
-        loss_count += 1
+#         loss = model.forward(batch_x, batch_t)
+#         model.backward()
+#         optimizer.update(model.params, model.grads)
 
-        if epoch % 10 == 0:
-            avg_loss = total_loss / loss_count
-            print('Epoch %d, iter %d / %d, Loss %.3f'\
-                % (epoch, iters + 1, n_iters, avg_loss))
-            loss_list.append(avg_loss)
-            total_loss = 0
-            loss_count = 0
+#         total_loss += loss
+#         loss_count += 1
 
-plt.figure()
-plt.plot(loss_list, 'r-')
-plt.xlabel('epoch')
-plt.ylabel('loss')
-plt.show()
+#         if epoch % 10 == 0:
+#             avg_loss = total_loss / loss_count
+#             print('Epoch %d, iter %d / %d, Loss %.3f'\
+#                 % (epoch, iters + 1, n_iters, avg_loss))
+#             loss_list.append(avg_loss)
+#             total_loss = 0
+#             loss_count = 0
+
+# plt.figure()
+# plt.plot(loss_list, 'r-')
+# plt.xlabel('epoch')
+# plt.ylabel('loss')
+# plt.show()
